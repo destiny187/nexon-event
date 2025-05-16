@@ -1,0 +1,16 @@
+FROM node:18-alpine AS builder
+RUN apk update && apk add --no-cache curl
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build:auth
+
+FROM node:18-alpine
+RUN apk update && apk add --no-cache curl
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY package*.json ./
+RUN npm install --only=production
+CMD ["node", "dist/apps/auth/main.js"]
