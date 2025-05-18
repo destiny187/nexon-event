@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import {Model, Types} from 'mongoose';
+import {ConflictException, Injectable} from '@nestjs/common';
+import {InjectModel} from '@nestjs/mongoose';
+import {Model} from 'mongoose';
 import {User} from "./user.schema";
+import {CreateUserDto, UpdateUserRolesDto} from "./user.dto";
 
 @Injectable()
 export class UserService {
@@ -9,9 +10,17 @@ export class UserService {
         @InjectModel(User.name) private readonly userModel: Model<User>,
     ) {}
 
-    async create(createDto: { nickname: string; email: string; password: string }) {
-        const created = new this.userModel(createDto);
-        return created.save();
+    async signup(createUserDto: CreateUserDto): Promise<string> {
+        try {
+            const created = new this.userModel(createUserDto);
+            await created.save();
+            return 'success';
+        } catch (err: any) {
+            if (err.code === 11000 && err.keyValue?.email) {
+                throw new ConflictException('email already exist');
+            }
+            throw err;
+        }
     }
 
     async findAll(): Promise<User[]> {
@@ -19,7 +28,23 @@ export class UserService {
     }
 
     async findById(id: string): Promise<User> {
-        const result = await this.userModel.findById(id).exec();
-        return result;
+        return await this.userModel.findById(id).exec();
+    }
+
+    async findByEmailForAuth(email: string): Promise<User | null> {
+        return await this.userModel.findOne({ email }).select('+password').exec();
+    }
+
+    async updateRoles(id: string, updateDto: UpdateUserRolesDto) {
+        const updated = await this.userModel
+            .findByIdAndUpdate(
+                id,
+                { roles: updateDto.roles },
+                { new: true },
+            )
+            .select('-password')
+            .exec();
+
+        return 'success';
     }
 }

@@ -1,6 +1,7 @@
-import {Controller, Get, Param} from "@nestjs/common";
+import {Body, Controller, Get, Param, Patch, Post} from "@nestjs/common";
 import {UserService} from "./user.service";
 import {success} from "../../../../../libs/common/utils/response.util";
+import {CreateUserDto, UpdateUserRolesDto} from "./user.dto";
 
 
 @Controller()
@@ -19,5 +20,16 @@ export class UserController {
         return success(result);
     }
 
+    @Post('api/v1/users/signup')
+    async create(@Body() createUserDto: CreateUserDto){
+        return success(this.userService.signup(createUserDto));
+    }
 
+    @Patch('api/v1/users/:id/roles')
+    async updateRoles(
+        @Param('id') id: string,
+        @Body() updateRolesDto: UpdateUserRolesDto,
+    ){
+        return success(this.userService.updateRoles(id, updateRolesDto));
+    }
 }

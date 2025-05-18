@@ -1,9 +1,0 @@
-- id: auth
-  target: http://auth:3000
-  resources: [auth, users]
-  stripPrefix: /api/v\d+
-
-- id: event
-  target: http://event:3000
-  resources: [events]
-  stripPrefix: /api/v\d+

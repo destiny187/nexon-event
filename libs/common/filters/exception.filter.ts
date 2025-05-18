@@ -3,6 +3,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import {ApiResponse} from "../../shared/dto/api-response.dto";
+import {error} from "../utils/response.util";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -25,11 +26,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
                 ? exception.message
                 : 'Internal server error';
 
-        const response: ApiResponse<null> = {
-            code: status,
-            data: null,
-            message,
-        };
+        const response: ApiResponse<null> = error(status, message);
         res.status(status).json(response);
     }
 }

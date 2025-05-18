@@ -45,6 +45,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/database/tsconfig.lib.json"
       }
+    },
+    "seed": {
+      "type": "application",
+      "root": "apps/seed",
+      "entryFile": "main",
+      "sourceRoot": "apps/seed/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/seed/tsconfig.app.json"
+      }
     }
   }
 }

@@ -1,25 +1,24 @@
 import {Document} from "mongoose";
 import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
-import {UserStatus} from "../../common/enums/user-enum";
+import {UserRole, UserStatus} from "../../../../../libs/shared/enums/user-enum";
 import * as bcrypt from 'bcrypt';
 
-@Schema({ collection: 'users', timestamps: true })
+@Schema({collection: 'users', timestamps: true})
 export class User extends Document {
-    @Prop({ required: true, maxlength: 50})
+    @Prop({required: true, maxlength: 50})
     nickname: string;
 
-    @Prop({ required: true, select: false })
+    @Prop({required: true, select: false})
     password: string;
 
-    @Prop({ required: true, unique: true })
+    @Prop({required: true, unique: true})
     email: string
 
-    @Prop({
-        type: String,
-        enum: UserStatus,
-        default: UserStatus.Active,
-    })
+    @Prop({type: String, enum: UserStatus, default: UserStatus.Active})
     status: UserStatus;
+
+    @Prop({type: [String], enum: UserRole, default: [UserRole.USER]})
+    roles: UserRole[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

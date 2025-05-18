@@ -11,7 +11,7 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-      - ./libs/database/init.js:/docker-entrypoint-initdb.d/init.js:ro
+#      - ./libs/database/init.js:/docker-entrypoint-initdb.d/init.js:ro
 
   auth:
     build:
@@ -22,6 +22,7 @@ services:
       - "3001:3001"
     depends_on:
       - mongo
+      - redis
 
   event:
       build:
@@ -46,6 +47,12 @@ services:
       depends_on:
         - auth
         - event
-
+        - redis
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --appendonly yes
 volumes:
   mongo_data:
