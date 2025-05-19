@@ -8,6 +8,7 @@ import * as path from "path";
 import {AuthModule} from "./modules/auth/auth.module";
 import {ApiPermissionModule} from "./modules/api-permission/api-permission.module";
 import {RedisCacheModule} from "../../../libs/redis/redis-cache-module";
+import {JwtModule} from "../../../libs/common/jwt/jwt.module";
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import {RedisCacheModule} from "../../../libs/redis/redis-cache-module";
             url: process.env.REDIS_URL,
             ttl: 0,
         }),
+        JwtModule,
         UserModule,
         AuthModule,
         ApiPermissionModule,

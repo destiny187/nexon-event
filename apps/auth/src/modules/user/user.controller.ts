@@ -1,7 +1,8 @@
-import {Body, Controller, Get, Param, Patch, Post} from "@nestjs/common";
+import {Body, Controller, Get, Param, Patch, Post, Query} from "@nestjs/common";
 import {UserService} from "./user.service";
 import {success} from "../../../../../libs/common/utils/response.util";
 import {CreateUserDto, UpdateUserRolesDto} from "./user.dto";
+import {Public} from "../../../../../libs/common/jwt/jwt-auth.guard";
 
 
 @Controller()
@@ -20,6 +21,7 @@ export class UserController {
         return success(result);
     }
 
+    @Public()
     @Post('api/v1/users/signup')
     async create(@Body() createUserDto: CreateUserDto){
         return success(this.userService.signup(createUserDto));
@@ -31,5 +33,15 @@ export class UserController {
         @Body() updateRolesDto: UpdateUserRolesDto,
     ){
         return success(this.userService.updateRoles(id, updateRolesDto));
+    }
+
+    @Get('api/v1/users/:id/invitations/invite-count')
+    async getInvitationCount(
+        @Param('id') userId: string,
+        @Query('rangeStart') rangeStart: string,
+        @Query('rangeEnd')   rangeEnd:   string,
+    ) {
+        const count = await this.userService.countInvitationAccepted(userId, rangeStart, rangeEnd);
+        return { count };
     }
 }

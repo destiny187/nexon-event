@@ -1,4 +1,3 @@
-
 import {
     Injectable,
     CanActivate,
@@ -12,7 +11,7 @@ import {CompiledApiPermission, RawApiPermission} from "../../../../../libs/share
 import {CacheKeys} from "../../../../../libs/common/constants/cache-keys";
 import axios from "axios";
 import {match} from "path-to-regexp";
-import { isEmpty } from "lodash";
+import {isEmpty} from "lodash";
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -22,7 +21,8 @@ export class RoleGuard implements CanActivate {
     constructor(
         private readonly configService: ConfigService,
         @Inject(CACHE_MANAGER) private readonly cache: Cache,
-    ) {}
+    ) {
+    }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const req = context.switchToHttp().getRequest();
@@ -47,12 +47,17 @@ export class RoleGuard implements CanActivate {
                 this.logger.log('api permission cache is empty');
                 perms = await axios.get(
                     `${this.configService.get<string>('AUTH_URL')}/api/v1/auth/api-permissions/check`,
+                    {
+                        headers: {
+                            'x-internal': 'true',
+                        }
+                    }
                 ).then(response => {
                     return response.data;
                 });
-                 this.compiled = perms.map(p => ({
+                this.compiled = perms.map(p => ({
                     method: p.method.toUpperCase(),
-                    matcher: match(p.path, { decode: decodeURIComponent, end: true }),
+                    matcher: match(p.path, {decode: decodeURIComponent, end: true}),
                     roles: p.roles,
                     rawPath: p.path,
                 }));

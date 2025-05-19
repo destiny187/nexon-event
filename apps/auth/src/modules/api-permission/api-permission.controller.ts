@@ -2,6 +2,7 @@ import {Body, Controller, Delete, Get, Param, Patch, Post,} from '@nestjs/common
 import {CreatePermissionDto, UpdatePermissionDto} from "./api-permission.dto";
 import {ApiPermissionService} from "./api-permission.service";
 import {success} from "../../../../../libs/common/utils/response.util";
+import {Public} from "../../../../../libs/common/jwt/jwt-auth.guard";
 
 @Controller()
 export class ApiPermissionManagerController {

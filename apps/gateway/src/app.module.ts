@@ -5,7 +5,7 @@ import * as path from "path";
 import {APP_FILTER} from "@nestjs/core";
 import {AllExceptionsFilter} from "../../../libs/common/filters/exception.filter";
 import {ProxyModule} from "./modules/proxy/proxy.module";
-import {JwtModule} from "./modules/jwt/jwt.module";
+import {JwtModule} from "../../../libs/common/jwt/jwt.module";
 import {RedisCacheModule} from "../../../libs/redis/redis-cache-module";
 
 

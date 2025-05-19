@@ -7,7 +7,7 @@ import {EventDocument} from "./event.schema";
 @Injectable()
 export class EventService {
     constructor(
-        @InjectModel(Event.name) private readonly eventModel: Model<EventDocument>,
+        @InjectModel(Event.name, 'eventdb') private readonly eventModel: Model<EventDocument>,
     ) {
     }
 

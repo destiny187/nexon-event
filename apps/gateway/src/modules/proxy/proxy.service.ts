@@ -31,6 +31,27 @@ export class ProxyService {
                 const route = routes.find(r => r.paths.includes(resource));
                 return route.target;
             },
+
+            on: {
+                proxyReq: (proxyReq, req, res) => {
+                    Object.entries(req.headers).forEach(([k, v]) => {
+                        if (v !== undefined) proxyReq.setHeader(k, v as string);
+                    });
+
+                    proxyReq.setHeader('x-forwarded-host', req.headers.host ?? '');
+                },
+
+                proxyRes: (proxyRes, req, res) => {
+                    res.setHeader('access-control-expose-headers', 'authorization, refresh-token');
+                },
+
+                error: (err, req, res) => {
+                    this.logger.error(`Proxy error: ${err.message}`);
+                },
+            },
+
+            timeout: 10_000,
+            proxyTimeout: 10_000,
         };
 
         this.proxyHandler = createProxyMiddleware(proxyOptions);

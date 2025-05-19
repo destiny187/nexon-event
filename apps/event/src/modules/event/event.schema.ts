@@ -23,21 +23,3 @@ export class Event extends Document {
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
-
-
-@Schema({collection: 'milestones', timestamps: true})
-export class Milestone {
-    @Prop({type: Types.ObjectId, ref: 'Event', required: true, index: true})
-    eventId: Types.ObjectId;
-
-    @Prop({required: true, min: 1})
-    seq: number;
-
-    @Prop({required: true})
-    conditionType: string;
-
-    @Prop({required: true})
-    value: number;
-}
-
-export const MilestoneSchema = SchemaFactory.createForClass(Milestone);

@@ -12,7 +12,6 @@ import {CACHE_MANAGER} from "@nestjs/cache-manager";
 import {CacheKeys, CacheTTLs} from "../../../../../libs/common/constants/cache-keys";
 import {RawApiPermission} from "../../../../../libs/shared/types/api-permission.type";
 import {Cache} from 'cache-manager';
-import {UpdateUserRolesDto} from "../user/user.dto";
 
 @Injectable()
 export class ApiPermissionService {
@@ -44,6 +43,11 @@ export class ApiPermissionService {
     async createMany(dtos: CreatePermissionDto[]): Promise<ApiPermission[]> {
         const inserted = await this.apiPermissionModel.insertMany(dtos);
         await this.resetCache();
+        return inserted as ApiPermission[];
+    }
+
+    async createManyForInternal(dtos: CreatePermissionDto[]): Promise<ApiPermission[]> {
+        const inserted = await this.apiPermissionModel.insertMany(dtos);
         return inserted as ApiPermission[];
     }
 

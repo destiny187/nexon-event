@@ -1,5 +1,5 @@
 import { Controller, All, Req, Res, UseGuards, Next } from '@nestjs/common';
-import {JwtAuthGuard, Public} from "../jwt/jwt-auth.guard";
+import {JwtAuthGuard, Public} from "../../../../../libs/common/jwt/jwt-auth.guard";
 import {ProxyService} from "./proxy.service";
 import {RoleGuard} from "../role/role.guard";
 

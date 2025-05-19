@@ -1,8 +1,7 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model, Types } from 'mongoose';
-import { Milestone } from "../event/event.schema";
-import { Reward } from "./milestone-reward.schema";
+import {Milestone, Reward} from "./milestone-reward.schema";
 import { MongoTransaction } from "../../../../../libs/database/mongo.transaction";
 import { CreateMilestoneRewardDto, UpdateMilestoneRewardDto } from "./milestone-reward.dto";
 import {toObjectId} from "../../../../../libs/common/utils/type-util";
@@ -10,9 +9,9 @@ import {toObjectId} from "../../../../../libs/common/utils/type-util";
 @Injectable()
 export class MilestoneRewardService {
     constructor(
-        @InjectConnection() private readonly connection: Connection,
-        @InjectModel(Milestone.name) private readonly milestoneModel: Model<Milestone>,
-        @InjectModel(Reward.name) private readonly rewardModel: Model<Reward>,
+        @InjectConnection('eventdb') private readonly connection: Connection,
+        @InjectModel(Milestone.name, 'eventdb') private readonly milestoneModel: Model<Milestone>,
+        @InjectModel(Reward.name, 'eventdb') private readonly rewardModel: Model<Reward>,
     ) {
     }
 
@@ -22,7 +21,7 @@ export class MilestoneRewardService {
     ): Promise<{ milestone: Milestone; rewards: Reward[] }> {
         const eventObjectId = toObjectId(eventId);
 
-        return MongoTransaction(this.connection, async (session) => {
+        return await MongoTransaction(this.connection, async (session) => {
             const seq = await this.milestoneModel
                 .countDocuments({eventId: eventObjectId})
                 .session(session)
@@ -108,7 +107,7 @@ export class MilestoneRewardService {
         const eventObjectId = toObjectId(eventId);
         const milestoneObjectId = toObjectId(milestoneId);
 
-        return MongoTransaction(this.connection, async (session) => {
+        return await MongoTransaction(this.connection, async (session) => {
             const milestone = await this.milestoneModel
                 .findOneAndUpdate(
                     {_id: milestoneObjectId, eventId: eventObjectId},
@@ -152,7 +151,7 @@ export class MilestoneRewardService {
         const eventObjectId = toObjectId(eventId);
         const milestoneObjectId = toObjectId(milestoneId);
 
-        return MongoTransaction(this.connection, async (session) => {
+        return await MongoTransaction(this.connection, async (session) => {
             const ms = await this.milestoneModel
                 .findOneAndDelete({_id: milestoneObjectId, eventId: eventObjectId}, {session})
                 .lean();

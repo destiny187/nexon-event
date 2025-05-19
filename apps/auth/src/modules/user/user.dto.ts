@@ -1,4 +1,4 @@
-import {ArrayNotEmpty, IsArray, IsEmail, IsEnum, IsNotEmpty, MinLength} from 'class-validator';
+import {ArrayNotEmpty, IsArray, IsEmail, IsEnum, IsNotEmpty, IsString, MinLength} from 'class-validator';
 import {UserRole} from "../../../../../libs/shared/enums/user-enum";
 
 export class CreateUserDto {
@@ -16,6 +16,9 @@ export class CreateUserDto {
     @ArrayNotEmpty()
     @IsEnum(UserRole, { each: true })
     roles?: UserRole[];
+
+    @IsString()
+    inviterCode?: string;
 }
 
 export class UpdateUserRolesDto {

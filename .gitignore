@@ -4,8 +4,8 @@
 #build
 /dist/
 
-#env
-.env
+#env -> 테스트를 위해  git에 push
+#.env
 
 #git
 /.idea/
