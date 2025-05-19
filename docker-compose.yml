@@ -3,15 +3,27 @@
 services:
   mongo:
     image: mongo:6.0
+    user: root
+    entrypoint: |
+      bash -c 'set -e
+      mkdir -p /etc/mongo
+      if [ ! -f /etc/mongo/keyfile ]; then
+        openssl rand -base64 756 > /etc/mongo/keyfile
+      fi
+      chown 999:999 /etc/mongo/keyfile
+      chmod 400 /etc/mongo/keyfile
+      exec /usr/local/bin/docker-entrypoint.sh \
+           mongod --replSet rs0 --bind_ip_all --keyFile /etc/mongo/keyfile'
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 1111
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: 1111
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-#      - ./libs/database/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      - ./libs/database/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      - mongo_key:/etc/mongo
 
   auth:
     build:
@@ -56,3 +68,4 @@ services:
     command: redis-server --appendonly yes
 volumes:
   mongo_data:
+  mongo_key:

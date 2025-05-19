@@ -5,6 +5,6 @@ services:
       dockerfile: apps/seed/Dockerfile
     command: node dist/apps/seed/main.js
     environment:
-      - MONGO_USER_URI=mongodb://root:1111@mongo:27017/userdb?authSource=admin
+      - MONGO_USER_URI=mongodb://root:1111@mongo:27017/userdb?authSource=admin&replicaSet=rs0&directConnection=true
 
   ## docker compose -f docker-compose.seed.yml up --build --abort-on-container-exit
