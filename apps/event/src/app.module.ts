@@ -15,10 +15,10 @@ import {JwtModule} from "../../../libs/common/jwt/jwt.module";
         ConfigModule.forRoot({isGlobal: true, envFilePath: path.resolve(process.cwd(), 'apps/event/.env')}),
         MongooseModule.forRoot(process.env.MONGO_URI, { connectionName: 'eventdb' }),
         JwtModule,
-        EventModule,
         MilestoneRewardModule,
         CheckerModule,
         RewardClaimModule,
+        EventModule,
     ],
     providers: [
         {provide: APP_FILTER, useClass: AllExceptionsFilter},

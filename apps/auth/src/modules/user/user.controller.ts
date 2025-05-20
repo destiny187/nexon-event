@@ -24,7 +24,7 @@ export class UserController {
     @Public()
     @Post('api/v1/users/signup')
     async create(@Body() createUserDto: CreateUserDto){
-        return success(this.userService.signup(createUserDto));
+        return success(await this.userService.signup(createUserDto));
     }
 
     @Patch('api/v1/users/:id/roles')

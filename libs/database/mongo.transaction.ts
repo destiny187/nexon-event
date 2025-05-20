@@ -1,5 +1,4 @@
 import {ClientSession, Connection} from "mongoose";
-import {Logger} from "@nestjs/common";
 
 export async function MongoTransaction<T>(
     connection: Connection,
@@ -8,6 +7,8 @@ export async function MongoTransaction<T>(
     const session = await connection.startSession();
     try {
         return await session.withTransaction(() => fn(session));
+    } catch (err) {
+        throw err;
     } finally {
         session.endSession();
     }

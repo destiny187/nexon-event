@@ -52,6 +52,8 @@ export class SeedCommand extends CommandRunner {
         //API 권한 모음
         this.logger.log('userdb - ApiPermissions');
         await this.permService.createManyForInternal([
+            {method: 'GET', path: '/api/v1/users', roles: [UserRole.ADMIN]},
+            {method: 'GET', path: '/api/v1/users/:id', roles: [UserRole.ADMIN]},
             {
                 method: 'POST',
                 path: '/api/v1/events/:eventId/milestones/:milestoneId/claim',

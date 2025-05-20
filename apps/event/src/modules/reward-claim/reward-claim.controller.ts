@@ -23,7 +23,7 @@ export class RewardClaimController {
     }
 
 
-    @Get('api/v1/events/reward-claims/')
+    @Get('api/v1/events/reward-claims')
     async getAllClaims(
     ) {
         return this.service.findAllClaims();

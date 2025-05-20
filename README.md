@@ -22,8 +22,8 @@
 # 2) 인스톨
 npm i
 
-# 3) docker-compose 실행
-docker compose up -d --build
+# 3) docker-compose 실행 (도커 실행 후)
+docker-compose up --build
 ```
 
 
@@ -31,7 +31,7 @@ docker compose up -d --build
 
 ```bash
 # 서버를 띄운 후 초기 데이터 세팅
-docker compose -f docker-compose.seed.yml up --build --abort-on-container-exit
+docker-compose -f docker-compose.seed.yml up --build --abort-on-container-exit
 ```
 
 ## 4. 테스트용 주요 API
@@ -54,7 +54,7 @@ docker compose -f docker-compose.seed.yml up --build --abort-on-container-exit
 | PATCH  | `/api/v1/events/:id` | 수정     | OPERATOR     |
 | DELETE | `/api/v1/events/:id` | 삭제     | OPERATOR     |
 
-### 4‑3. 마일스톤·보상(Milestone & Reward)
+### 4‑3. 마일스톤·보상(Milestone & Reward)
 
 | 메서드    | 경로                                                | 설명         | 권한       |
 | ------ | ------------------------------------------------- | ---------- | -------- |
@@ -64,7 +64,7 @@ docker compose -f docker-compose.seed.yml up --build --abort-on-container-exit
 | PATCH  | `/api/v1/events/:eventId/milestones/:milestoneId` | 수정         | OPERATOR |
 | DELETE | `/api/v1/events/:eventId/milestones/:milestoneId` | 삭제         | OPERATOR |
 
-### 4‑4. 보상 요청(Reward Claim)
+### 4‑4. 보상 요청(Reward Claim)
 
 | 메서드  | 경로                                                      | 설명       | 권한                   |
 | ---- | ------------------------------------------------------- | -------- |----------------------|
@@ -72,7 +72,7 @@ docker compose -f docker-compose.seed.yml up --build --abort-on-container-exit
 | GET  | `/api/v1/events/reward-claims/me`                       | 내 보상 이력  | USER                 |
 | GET  | `/api/v1/events/reward-claims`                          | 전체 보상 이력 | OPERATOR<br/>AUDITOR |
 
-> API 요청 시 **Authorization: Bearer <JWT>** 헤더가 필요합니다. Gateway는 JWT 검증 후 역할(Role)을 확인하여 프록시합니다.
+> API 요청 시 **Authorization: Bearer <JWT>** 헤더가 필요합니다. Gateway는 JWT 검증 후 역할(Role)을 확인하여 프록시합니다.
 > 
 > Postman 사용시 회원가입 Scripts - Post-response에 다음을 입력하여 토큰을 사용합니다.
 > const res = pm.response.json();
